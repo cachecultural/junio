@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Section from '../components/Section';
-import { motion } from 'framer-motion';
-// import portalAnimation from '../assets/digital-portal.json';
-import Lottie from 'lottie-react';
-import { Activity } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const features = [
     {
@@ -34,9 +32,41 @@ const features = [
 ];
 
 const Integration = () => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [direction, setDirection] = useState(0);
+
+    const handleNext = () => {
+        if (currentIndex < features.length - 1) {
+            setDirection(1);
+            setCurrentIndex(currentIndex + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentIndex > 0) {
+            setDirection(-1);
+            setCurrentIndex(currentIndex - 1);
+        }
+    };
+
+    const slideVariants = {
+        enter: (direction) => ({
+            x: direction > 0 ? 300 : -300,
+            opacity: 0,
+        }),
+        center: {
+            x: 0,
+            opacity: 1,
+        },
+        exit: (direction) => ({
+            x: direction > 0 ? -300 : 300,
+            opacity: 0,
+        }),
+    };
+
     return (
-        <Section id="integration" background="glass" className="overflow-visible">
-            <div className="text-center max-w-4xl mx-auto mb-20">
+        <Section id="integration" background="glass" className="overflow-hidden">
+            <div className="text-center max-w-4xl mx-auto mb-12">
                 <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                     Five Services. One Strategy. <br />
                     <span className="text-brand-primary">That's The Difference.</span>
@@ -46,48 +76,87 @@ const Integration = () => {
                 </p>
             </div>
 
-            <div className="space-y-12 relative before:absolute before:inset-0 before:w-1 before:bg-gradient-to-b before:from-brand-primary before:to-transparent before:left-8 md:before:left-1/2 before:-translate-x-1/2 before:opacity-20">
-                {/* Central Hub - Strategy - Using Lottie Portal */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-center w-full max-w-[200px] hidden md:block">
-                    <div className="w-40 h-40 mx-auto mb-4 relative flex items-center justify-center">
-                        <div className="absolute inset-0 bg-brand-primary/20 blur-[50px] rounded-full animate-pulse" />
-                        <Activity size={48} className="text-brand-primary relative z-10" />
-                    </div>
-                    <div className="inline-block bg-brand-primary text-galaxy-100 font-bold px-4 py-1 rounded-full text-sm shadow-[0_0_20px_rgba(204,255,0,0.4)]">
-                        ONE STRATEGY
-                    </div>
+            {/* Carousel Container */}
+            <div className="relative max-w-4xl mx-auto">
+                {/* Navigation Buttons */}
+                <button
+                    onClick={handlePrev}
+                    disabled={currentIndex === 0}
+                    className={`absolute left-0 md:-left-16 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-brand-primary/10 border border-brand-primary/30 flex items-center justify-center transition-all hover:bg-brand-primary hover:scale-110 ${currentIndex === 0 ? 'opacity-30 cursor-not-allowed hover:scale-100 hover:bg-brand-primary/10' : ''
+                        }`}
+                    aria-label="Previous"
+                >
+                    <ChevronLeft className="text-brand-primary" />
+                </button>
+
+                <button
+                    onClick={handleNext}
+                    disabled={currentIndex === features.length - 1}
+                    className={`absolute right-0 md:-right-16 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-brand-primary/10 border border-brand-primary/30 flex items-center justify-center transition-all hover:bg-brand-primary hover:scale-110 ${currentIndex === features.length - 1 ? 'opacity-30 cursor-not-allowed hover:scale-100 hover:bg-brand-primary/10' : ''
+                        }`}
+                    aria-label="Next"
+                >
+                    <ChevronRight className="text-brand-primary" />
+                </button>
+
+                {/* Card Container with AnimatePresence */}
+                <div className="relative min-h-[400px] flex items-center justify-center px-14 md:px-0">
+                    <AnimatePresence mode="wait" custom={direction}>
+                        <motion.div
+                            key={currentIndex}
+                            custom={direction}
+                            variants={slideVariants}
+                            initial="enter"
+                            animate="center"
+                            exit="exit"
+                            transition={{
+                                x: { type: "spring", stiffness: 300, damping: 30 },
+                                opacity: { duration: 0.3 }
+                            }}
+                            className="w-full"
+                        >
+                            <div className="p-8 md:p-10 rounded-2xl bg-galaxy-200 border border-white/5 hover:border-brand-primary/30 transition-colors">
+                                <span className="text-brand-primary font-bold text-2xl mb-4 block">0{currentIndex + 1}.</span>
+                                <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">{features[currentIndex].title}</h3>
+                                <p className="text-gray-400 text-lg mb-6 leading-relaxed">
+                                    {features[currentIndex].subtitle}
+                                </p>
+                                <div className="pl-6 border-l-4 border-brand-primary/50">
+                                    <p className="text-base text-gray-300">
+                                        <span className="text-brand-primary font-medium">What you get:</span> {features[currentIndex].result}
+                                    </p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
 
-                {features.map((feature, i) => (
-                    <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.5, delay: i * 0.1 }}
-                        className={`relative flex flex-col md:flex-row gap-8 md:gap-16 items-start ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
-                    >
-                        {/* Timeline Dot */}
-                        <div className="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-brand-primary shadow-[0_0_10px_rgba(204,255,0,0.8)] z-10 mt-6" />
+                {/* Dot Indicators */}
+                <div className="flex justify-center items-center gap-2 mt-8">
+                    {features.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => {
+                                setDirection(index > currentIndex ? 1 : -1);
+                                setCurrentIndex(index);
+                            }}
+                            className={`transition-all ${index === currentIndex
+                                    ? 'w-8 h-3 bg-brand-primary rounded-full'
+                                    : 'w-3 h-3 bg-gray-600 rounded-full hover:bg-gray-500'
+                                }`}
+                            aria-label={`Go to slide ${index + 1}`}
+                        />
+                    ))}
+                </div>
 
-                        <div className="ml-20 md:ml-0 md:w-1/2 p-6 md:p-8 rounded-2xl bg-galaxy-200 border border-white/5 hover:border-brand-primary/30 transition-colors">
-                            <span className="text-brand-primary font-bold text-lg mb-2 block">0{i + 1}.</span>
-                            <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
-                            <p className="text-gray-400 mb-6 leading-relaxed">
-                                {feature.subtitle}
-                            </p>
-                            <div className="pl-4 border-l-2 border-brand-primary/50">
-                                <p className="text-sm text-gray-300">
-                                    <span className="text-brand-primary font-medium">What you get:</span> {feature.result}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="hidden md:block md:w-1/2" />
-                    </motion.div>
-                ))}
+                {/* Counter */}
+                <div className="text-center mt-4 text-gray-500 text-sm">
+                    {currentIndex + 1} / {features.length}
+                </div>
             </div>
 
-            <div className="mt-20 text-center bg-galaxy-200 p-8 rounded-2xl border border-white/5 max-w-4xl mx-auto">
+            {/* Bottom Line Section */}
+            <div className="mt-16 text-center bg-galaxy-200 p-8 rounded-2xl border border-white/5 max-w-4xl mx-auto">
                 <h3 className="text-2xl font-bold text-white mb-4">The Bottom Line</h3>
                 <p className="text-gray-400">
                     When everything comes from one team, nothing falls through the cracks. No miscommunication. Just one integrated system designed to bring you customers.

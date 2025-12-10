@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import { Menu, X } from 'lucide-react';
-// import logoSvg from '../assets/lad-nebula.svg';
+import LogoSvg from '../assets/lad-nebula logo.svg';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -32,11 +32,12 @@ const Navbar = () => {
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
                 {/* Logo */}
-                <a href="#" className="flex items-center gap-2 group relative z-50">
-                    <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center text-galaxy-100 font-black text-xl">
-                        L
-                    </div>
-                    <span className="font-bold text-xl tracking-tight text-white">LAD <span className="text-brand-primary">NEBULA</span></span>
+                <a href="#" className="flex items-center gap-3 group relative z-50">
+                    <img
+                        src={LogoSvg}
+                        alt="Lad Nebula"
+                        className="h-8 md:h-10 w-auto transition-transform group-hover:scale-105"
+                    />
                 </a>
 
                 {/* Desktop Menu */}
