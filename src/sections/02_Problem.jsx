@@ -38,17 +38,27 @@ const Problem = () => {
                         <p>
                             You know the feeling: a client asks for your website. You cringe a little.
                         </p>
-                        <p>
-                            Your work is professional. Your pricing is professional. But your Instagram looks like you post whenever you remember. Your website loads slowly and has your old logo from 2019.
-                        </p>
+                        <div
+                            className="p-6 rounded-2xl border border-white/10"
+                            style={{ background: 'rgba(20, 20, 30, 0.88)' }}
+                        >
+                            <p>
+                                Your work is professional. Your pricing is professional. But your Instagram looks like you post whenever you remember. Your website loads slowly and has your old logo from 2019.
+                            </p>
+                        </div>
                         <div className="pl-6 border-l-2 border-brand-primary">
                             <p className="text-white font-medium italic">
                                 YOU'RE LEAVING MONEY ON THE TABLE!!
                             </p>
                         </div>
-                        <p>
-                            Not because your business isn't good... it is. But because online, you look like you're still figuring it out. Meanwhile, your competitors with worse products have better websites.
-                        </p>
+                        <div
+                            className="p-6 rounded-2xl border border-white/10"
+                            style={{ background: 'rgba(20, 20, 30, 0.88)' }}
+                        >
+                            <p>
+                                Not because your business isn't good... it is. But because online, you look like you're still figuring it out. Meanwhile, your competitors with worse products have better websites.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
