@@ -15,7 +15,15 @@ const Problem = () => {
                     <div className="relative aspect-square flex items-center justify-center">
                         {/* Rocket Animation - Floating freely and scaled up */}
                         <div className="relative z-10 w-full h-full scale-[1.33]">
-                            <Lottie animationData={rocketAnimation} loop={true} className="w-full h-full" />
+                            <Lottie
+                                animationData={rocketAnimation}
+                                loop={true}
+                                className="w-full h-full"
+                                rendererSettings={{
+                                    preserveAspectRatio: 'xMidYMid slice',
+                                    progressiveLoad: true,
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

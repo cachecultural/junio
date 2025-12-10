@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Section from '../components/Section';
 import Button from '../components/Button';
 import { motion } from 'framer-motion';
@@ -6,6 +6,17 @@ import { motion } from 'framer-motion';
 // import Lottie from 'lottie-react';
 
 const Hero = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     return (
         <Section id="hero" className="min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden">
             {/* Background Ambience */}
@@ -44,12 +55,21 @@ const Hero = () => {
                 >
                     <div
                         className="p-6 md:p-8 rounded-2xl border border-white"
-                        style={{
-                            background: 'rgba(250, 250, 250, 0)',
-                            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-                            backdropFilter: 'blur(11.5px)',
-                            WebkitBackdropFilter: 'blur(11.5px)',
-                        }}
+                        style={
+                            isMobile
+                                ? {
+                                    // Mobile: Use solid background (much faster)
+                                    background: 'rgba(30, 30, 40, 0.8)',
+                                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                                }
+                                : {
+                                    // Desktop: Keep beautiful glassmorphism
+                                    background: 'rgba(250, 250, 250, 0)',
+                                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                                    backdropFilter: 'blur(11.5px)',
+                                    WebkitBackdropFilter: 'blur(11.5px)',
+                                }
+                        }
                     >
                         <p className="text-xl md:text-2xl text-gray-400 leading-relaxed">
                             Your work is solid. Your website looks like 2015. <br className="hidden md:block" />
